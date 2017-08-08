@@ -1,6 +1,5 @@
 	/*POV 5x8 LED  */
 	/***************************************************************************************************************/
-<<<<<<< HEAD
 	int A[] = {1,1,1,1,1,1,1,1, 1,0,0,1,0,0,0,0, 1,0,0,1,0,0,0,0, 1,0,0,1,0,0,0,0, 1,1,1,1,1,1,1,1};
 	int B[] = {1,1,1,1,1,1,1,1, 1,0,0,1,0,0,0,1, 1,0,0,1,0,0,0,1, 1,0,0,1,0,0,0,1, 0,1,1,0,1,1,1,0};
 	int C[] = {0,0,1,1,1,1,0,0, 0,1,0,0,0,0,1,0, 1,0,0,0,0,0,0,1, 1,0,0,0,0,0,0,1, 1,0,0,0,0,0,0,1};
@@ -79,112 +78,80 @@
 	int Parenthese_1[]	    = {0,1,0,0,0,0,0,1, 0,0,1,0,0,0,1,0, 0,0,0,1,1,1,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0};//) character
 	int Parenthese_2[]	    = {0,0,0,1,1,1,0,0, 0,0,1,0,0,0,1,0, 0,1,0,0,0,0,0,1, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0};//( character
 
-=======
-
- #include "font.h"
- #include <SoftwareSerial.h>
-  int writeCode=0;
->>>>>>> 6ead057004488e43fa4ca9840eff28e417b2612a
   /***********************************************************************************/ 
  /*****************Variables*******************/
-int leds[]={5,6,7,8,9,10,11,12};
+int leds[]={2,3,4,5,6,7,8,9};
 byte Length=0; 
 char Letter;   
 String Word;
-<<<<<<< HEAD
-=======
-String spaceLetterSettings;
-String dotTimeSettings;
-String spaceletterValue;
-String dotTimeValue;
-String reverseSettings;
-String normalSettings;
-int reverse=0;
->>>>>>> 6ead057004488e43fa4ca9840eff28e417b2612a
 int spaceLetter=0;
 int dotTime=0;
 int letterDebug;
-SoftwareSerial mySerial(2, 3);
 /**************************************************/
 void cleanLed()
 {
   for(int i=0;i<8;i++)
     {
-	digitalWrite(leds[i],LOW);
+      digitalWrite(i+2,LOW);
     } 
 }
 /**************************************************/
 
 //*******************************************
-void printLetter(char ch)
+void printLetter(int character[])
 {
   int y;
-  int i;
-  
-  if (ch < 32 || ch > 126){
-    ch = 32;
-  }
-  
-  ch -= 32;
-  
 
- for (i=4; i>-1; i--) {
-	 
- byte b = font[ch][i];
- 
+ //************ 1. Column***************************
   for (y=0; y<8; y++)
   { 
-    digitalWrite(leds[y], bitRead(b,y));
-  
+    digitalWrite(y+2, character[y]);
   }
   delay(dotTime);
   cleanLed();
-
  
- }
  
-
+ //************ 2. Column***************************
   for (y=0; y<8; y++)
   {
-    digitalWrite(leds[y], 0);
+    digitalWrite(y+2, character[y+8]);
   }
-  
-  delay(spaceLetter);
-}
-//*********************************************
-
-//*******************************************
-void reverseprintLetter(char ch)
-{
-  int y;
-  int i;
-  
-  if (ch < 32 || ch > 126){
-    ch = 32;
-  }
-  
-  ch -= 32;
-  
-
- for (i=0; i<5; i++) {
+  delay(dotTime);
+    cleanLed();
    
- byte b = font[ch][i];
  
+ //************ 3. Column***************************
   for (y=0; y<8; y++)
-  { 
-    digitalWrite(leds[y], bitRead(b,7-y));
-  
+  {   
+    digitalWrite(y+2, character[y+16]);
   }
   delay(dotTime);
-  cleanLed();
-
- 
- }
- 
+    cleanLed();
+	
+  //************ 4. Column*************************** 
 
   for (y=0; y<8; y++)
   {
-    digitalWrite(leds[y], 0);
+    digitalWrite(y+2, character[y+24]);
+  }
+  delay(dotTime);
+    cleanLed();
+ 
+ //************ 5. Column*************************** 
+  for (y=0; y<8; y++)
+  {
+    digitalWrite(y+2, character[y+32]);
+  }
+  delay(dotTime);
+    cleanLed();
+	
+   	
+
+//********************Clean All Led************************
+
+  for (y=0; y<8; y++)
+  {
+    digitalWrite(y+2, 0);
   }
   
   delay(spaceLetter);
@@ -193,28 +160,19 @@ void reverseprintLetter(char ch)
 
 void setup()
  {
-
-
 	 spaceLetter=10;
      dotTime=3;
 	 
-	 for(int i=5;i<13;i++)
+	 for(int i=2;i<10;i++)
 	 {		
 		pinMode(i, OUTPUT);
 	 }
-<<<<<<< HEAD
 		Serial3.begin(9600);
 		Serial3.flush();
-=======
-	  Serial.begin(9600);
-		mySerial.begin(9600);
-		mySerial.flush();
->>>>>>> 6ead057004488e43fa4ca9840eff28e417b2612a
  }
  
  void loop()
  {
-<<<<<<< HEAD
 	 if (Serial3.available())
   {
     
@@ -246,64 +204,6 @@ void setup()
                                                                                                                                                                                                                                                           
                switch (Character)
                 {
-=======
-  
-      	 if (mySerial.available())
-        {
-          
-          mySerial.flush(); 
-          Word="";
-          spaceLetterSettings="";
-          dotTimeSettings="";
-          reverseSettings="";
-          normalSettings="";
-          spaceletterValue =""; 
-              while (mySerial.available() >0)
-              {      
-                 delay(5);
-                 Letter = mySerial.read(); 
-                 Word = Word+Letter;
-                 
-             } 
-                 
-                 spaceLetterSettings=Word.substring(0,13);
-                 dotTimeSettings=Word.substring(0,9);
-                 reverseSettings=Word.substring(0,9);
-                 normalSettings=Word.substring(0,8);
-                  
-                  if(spaceLetterSettings=="<spaceLetter>")
-                  {
-                    writeCode=2;
-                    spaceletterValue=Word.substring((spaceLetterSettings.length()),Word.indexOf('|'));
-                    spaceLetter=spaceletterValue.toInt();
-
-                  }
-                  
-                  if(dotTimeSettings=="<dotTime>")
-                  {
-                    writeCode=2;
-                    dotTimeValue=Word.substring((dotTimeSettings.length()),Word.indexOf('|'));
-                    dotTime=dotTimeValue.toInt();
-                  }
-
-                  if(reverseSettings=="<Reverse>")
-                  {
-
-                    writeCode=2;
-                    reverse=1;
-
-                  }
-                  if(reverseSettings=="<Normal>")
-                  {
-
-                    writeCode=2;
-                    reverse=0;
-
-                  }
-         
-         } 
-
->>>>>>> 6ead057004488e43fa4ca9840eff28e417b2612a
 
 					case 'A':
 					printLetter(A);
@@ -528,7 +428,6 @@ void setup()
 					break;
  					
 
-<<<<<<< HEAD
                  }  
                  
              }  
@@ -538,32 +437,3 @@ void setup()
    
    
  }
-=======
-           if (writeCode==0)
-        
-           {
-            
-               Length = Word.length(); 
-           for(int i=0;i<Length;i++)
-              {
-                char Character = Word.charAt(i);
-                
-             if (reverse==0)
-             {
-                printLetter(Character);
-             }  
-
-             else if (reverse==1)
-             {
-                reverseprintLetter(Character);
-             }   
-					
-                  
-        
-                         }  
-                         
-                     }  
-                
-             }
-
->>>>>>> 6ead057004488e43fa4ca9840eff28e417b2612a
